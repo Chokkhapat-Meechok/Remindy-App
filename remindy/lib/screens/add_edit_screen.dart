@@ -15,10 +15,16 @@ class AddEditScreen extends StatefulWidget {
 class _AddEditScreenState extends State<AddEditScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
+  final _descController = TextEditingController();
   DateTime _time = DateTime.now();
   String _type = 'Work';
+  bool _hasTitle = false;
+  final FocusNode _titleFocus = FocusNode();
+  final FocusNode _descFocus = FocusNode();
 
   bool get isEditing => widget.reminder != null;
+
+  final List<String> _types = const ['Work', 'Personal'];
 
   @override
   void initState() {
@@ -26,49 +32,208 @@ class _AddEditScreenState extends State<AddEditScreen> {
     if (isEditing) {
       final r = widget.reminder!;
       _titleController.text = r.title;
-      _time = r.time;
+      _time = r.dueAt ?? DateTime.now();
       _type = r.type;
+      _descController.text = r.description;
+      _hasTitle = r.title.trim().isNotEmpty;
     }
+    _titleController.addListener(() {
+      final nonEmpty = _titleController.text.trim().isNotEmpty;
+      if (nonEmpty != _hasTitle) setState(() => _hasTitle = nonEmpty);
+    });
+    _titleFocus.addListener(() => setState(() {}));
+    _descFocus.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    _titleFocus.dispose();
+    _descFocus.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Reminder')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
+      backgroundColor: const Color(0xFFF7F8FA),
+      appBar: AppBar(
+        title: Text(isEditing ? 'Edit Reminder' : 'Add Reminder'),
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: cs.onSurface,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
-                validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Time: ${DateFormat.yMd().add_jm().format(_time)}',
+              // Title Section
+              Text('Title', style: theme.textTheme.bodySmall),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+                ),
+                child: TextField(
+                  focusNode: _titleFocus,
+                  controller: _titleController,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 18, // 👈 ค่านี้ทำให้กลางจริง
                     ),
                   ),
-                  TextButton(onPressed: _pickTime, child: const Text('Pick')),
-                ],
+                ),
               ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                initialValue: _type,
-                items: const [
-                  DropdownMenuItem(value: 'Work', child: Text('Work')),
-                  DropdownMenuItem(value: 'Personal', child: Text('Personal')),
-                ],
-                onChanged: (v) => setState(() => _type = v ?? 'Work'),
+
+              const SizedBox(height: 20),
+
+              // Description Section
+              Text('Description', style: theme.textTheme.bodySmall),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 120),
+                  child: TextField(
+                    focusNode: _descFocus,
+                    controller: _descController,
+                    minLines: 4,
+                    maxLines: 8,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                  ),
+                ),
               ),
-              const Spacer(),
-              ElevatedButton(onPressed: _save, child: const Text('Save')),
+
+              const SizedBox(height: 20),
+
+              // Time Section
+              Text('Time', style: theme.textTheme.bodySmall),
+              const SizedBox(height: 8),
+              InkWell(
+                onTap: _pickTime,
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: const Color(0xFFE5E7EB),
+                      width: 1,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(DateFormat.yMMMd().add_jm().format(_time)),
+                      ),
+                      const Icon(Icons.chevron_right, size: 20),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Category Section
+              Text('Category', style: theme.textTheme.bodySmall),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: Row(
+                  children: _types.map((t) {
+                    final selected = t == _type;
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => _type = t),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          curve: Curves.easeInOut,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: selected ? cs.primary : Colors.transparent,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Center(
+                            child: Text(
+                              t,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: selected ? Colors.white : cs.onSurface,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              const SizedBox(height: 24),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+        child: SizedBox(
+          height: 56,
+          child: ElevatedButton(
+            onPressed: _hasTitle ? _save : null,
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              elevation: 0,
+              backgroundColor: _hasTitle
+                  ? cs.primary
+                  : cs.primary.withAlpha((0.4 * 255).round()),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: Text(
+              isEditing ? 'Save' : 'Add Reminder',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ),
@@ -82,31 +247,36 @@ class _AddEditScreenState extends State<AddEditScreen> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-    if (date == null) return;
-    if (!mounted) return;
+    if (date == null || !mounted) return;
     final t = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(_time),
     );
-    if (t == null) return;
-    if (!mounted) return;
+    if (t == null || !mounted) return;
     setState(
       () => _time = DateTime(date.year, date.month, date.day, t.hour, t.minute),
     );
   }
 
   void _save() {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_hasTitle) return;
     final provider = Provider.of<ReminderProvider>(context, listen: false);
     final title = _titleController.text.trim();
+    final desc = _descController.text.trim();
     if (isEditing) {
       final r = widget.reminder!;
-      r.title = title;
-      r.time = _time;
-      r.type = _type;
-      provider.updateReminder(r);
+      final updated = Reminder(
+        id: r.id,
+        title: title,
+        description: desc,
+        dueAt: _time,
+        type: _type,
+        isCompleted: r.isCompleted,
+        isDeleted: r.isDeleted,
+      );
+      provider.updateReminder(updated);
     } else {
-      provider.addReminder(title, _time, _type);
+      provider.addReminder(title, _time, _type, description: desc);
     }
     if (!mounted) return;
     Navigator.of(context).pop();
