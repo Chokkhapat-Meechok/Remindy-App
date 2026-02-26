@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import '../services/local_storage_service.dart';
 
 class OnboardData {
   final String title;
@@ -34,21 +35,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _current = 0;
 
-  void _goNext() {
+  Future<void> _goNext() async {
     if (_current < pages.length - 1) {
       _controller.nextPage(
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
     } else {
-      _goHome();
+      await _goHome();
     }
   }
 
-  void _goHome() {
+  Future<void> _goHome() async {
+    try {
+      await const LocalStorageService().setSeenOnboarding();
+    } catch (_) {
+      // ignore persistence failures but continue navigation
+    }
+
+    if (!mounted) return;
     Navigator.of(
       context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
   }
 
   Widget _buildDot(int index) {
@@ -102,15 +110,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Use asset image instead of icon, fallback to icon if missing
-                          Image.asset(
-                            'assets/brain.png',
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.contain,
-                            errorBuilder: (c, e, s) => const Icon(
-                              Icons.psychology,
-                              size: 120,
-                              color: Color(0xFF2F3A4A),
+                          Transform.scale(
+                            scale:
+                                2.5, // visually enlarge 2.5x while keeping layout size small
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              'assets/brain.png',
+                              width:
+                                  120, // keep layout footprint small so text isn't pushed down
+                              height: 120,
+                              fit: BoxFit.contain,
+                              errorBuilder: (c, e, s) => const Icon(
+                                Icons.psychology,
+                                size: 300,
+                                color: Color(0xFF2F3A4A),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 28),
@@ -192,7 +206,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 14, left: 18),
                   child: TextButton(
-                    onPressed: _goHome,
+                    onPressed: () => _goHome(),
                     style: TextButton.styleFrom(
                       backgroundColor: const Color.fromARGB(
                         255,
@@ -222,5 +236,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
