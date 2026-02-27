@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "444195093862",
+    "project_id": "remindy-29a4a",
+    "storage_bucket": "remindy-29a4a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444195093862:android:92acf94decbbebf4cc5ca7",
+        "android_client_info": {
+          "package_name": "com.example.remindy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhbHV099juHfpCaSXTv1Lqs4NM8nf_g-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
