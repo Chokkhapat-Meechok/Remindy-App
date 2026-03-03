@@ -1,8 +1,5 @@
 {
   "projects": {
-    "default": "remindy-368de",
-    "build/web": "remindy-29a4a"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "remindy-29a4a"
+  }
 }
