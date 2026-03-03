@@ -10,10 +10,27 @@ import 'screens/home_screen.dart';
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
-class RemindyApp extends StatelessWidget {
+class RemindyApp extends StatefulWidget {
   final bool showOnboarding;
 
   const RemindyApp({super.key, this.showOnboarding = true});
+
+  @override
+  State<RemindyApp> createState() => _RemindyAppState();
+}
+
+class _RemindyAppState extends State<RemindyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Wait until providers are created, then handle any pending web redirect result.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        final auth = Provider.of<AuthService>(context, listen: false);
+        auth.handleRedirectResult();
+      } catch (_) {}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +48,9 @@ class RemindyApp extends StatelessWidget {
           textTheme: GoogleFonts.interTextTheme(),
         ),
         debugShowCheckedModeBanner: false,
-        home: showOnboarding ? const OnboardingScreen() : const HomeScreen(),
+        home: widget.showOnboarding
+            ? const OnboardingScreen()
+            : const HomeScreen(),
       ),
     );
   }

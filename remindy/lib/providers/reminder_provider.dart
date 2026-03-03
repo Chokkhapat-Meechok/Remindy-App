@@ -153,6 +153,21 @@ class ReminderProvider extends ChangeNotifier {
     final idx = _items.indexWhere((r) => r.id == id);
     if (idx >= 0) {
       _items[idx].isCompleted = !_items[idx].isCompleted;
+      final r = _items[idx];
+      // If the reminder was marked completed, cancel any scheduled notification.
+      // If it was unmarked (set to not completed), schedule notification again
+      // when it has a due date and is not deleted.
+      if (r.isCompleted) {
+        NotificationService.instance.cancelReminder(r.id).catchError((e) {
+          if (kDebugMode) print('Cancel notif error: $e');
+        });
+      } else {
+        if (r.dueAt != null && !r.isDeleted) {
+          NotificationService.instance.scheduleReminder(r).catchError((e) {
+            if (kDebugMode) print('Schedule notif error: $e');
+          });
+        }
+      }
       _saveToPrefs();
       notifyListeners();
     }

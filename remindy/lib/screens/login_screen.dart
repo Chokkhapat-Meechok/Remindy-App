@@ -22,21 +22,7 @@ class LoginScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () async {
-                await auth.loginWithEmail(email: 'user@example.mock');
-                if (context.mounted) Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.mail_outline),
-              label: const Text('Continue with Email'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF3B82F6),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
+            // Email login removed per request. Keep only Google and Guest options.
             const SizedBox(height: 12),
             ElevatedButton.icon(
               onPressed: () async {
@@ -80,3 +66,5 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
+
+// Email login form removed — kept out per request. Google and Guest remain.

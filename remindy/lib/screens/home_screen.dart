@@ -11,7 +11,9 @@ import 'trash_screen.dart';
 import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final int initialIndex;
+
+  const HomeScreen({Key? key, this.initialIndex = 0}) : super(key: key);
 
   static const primaryColor = Color(0xFF3B82F6);
   static const secondaryColor = Color(0xFF10B981);
@@ -24,12 +26,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<int> _filterIndex = ValueNotifier<int>(0);
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   @override
   void dispose() {
     _filterIndex.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
   }
 
   @override
