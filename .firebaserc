@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "remindy-29a4a"
+  },
+  "targets": {
+    "remindy-29a4a": {
+      "hosting": {
+        "landing-pag": [
+          "remindy-29a4a-landing-pag"
+        ],
+        "main": [
+          "remindy-29a4a"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

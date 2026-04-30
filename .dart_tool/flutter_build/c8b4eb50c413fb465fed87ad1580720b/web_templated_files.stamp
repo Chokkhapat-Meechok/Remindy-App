@@ -1,0 +1,1 @@
+{"inputs":["C:\\projects\\remindy\\web\\*\\index.html","C:\\projects\\remindy\\web\\flutter_bootstrap.js","C:\\flutter\\bin\\cache\\engine.stamp"],"outputs":["C:\\projects\\remindy\\build\\web\\*\\index.html","C:\\projects\\remindy\\build\\web\\flutter_bootstrap.js"],"buildKey":"[{\"compileTarget\":\"dart2js\",\"renderer\":\"canvaskit\",\"mainJsPath\":\"main.dart.js\"},{}]"}

@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "444195093862",
+    "project_id": "remindy-29a4a",
+    "storage_bucket": "remindy-29a4a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444195093862:android:92acf94decbbebf4cc5ca7",
+        "android_client_info": {
+          "package_name": "com.example.remindy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444195093862-6kp0j2prgnu0g6hf249bu3i8esiqjean.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhbHV099juHfpCaSXTv1Lqs4NM8nf_g-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444195093862-6kp0j2prgnu0g6hf249bu3i8esiqjean.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "444195093862-i2kobdlfivftq2r1llipciii6bmbbik6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.remindy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444195093862:android:4ab086b3da04eb8fcc5ca7",
+        "android_client_info": {
+          "package_name": "com.remindy.app.release2026"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444195093862-6kp0j2prgnu0g6hf249bu3i8esiqjean.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhbHV099juHfpCaSXTv1Lqs4NM8nf_g-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444195093862-6kp0j2prgnu0g6hf249bu3i8esiqjean.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "444195093862-i2kobdlfivftq2r1llipciii6bmbbik6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.remindy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
